@@ -39,11 +39,11 @@ This project represents the convergence of two distinct NLP initiatives into a s
 
 ```mermaid
 graph LR
-    User[User Interface] <-->|HTTP/JSON| NextJS[Next.js Frontend]
-    NextJS <-->|API Calls| Flask[Flask Backend (Port 5001)]
-    Flask -->|Inference| Binary[Binary Model (Naive Bayes)]
-    Flask -->|Inference| Emotion[Emotion Model (LogReg)]
-    Binary -->|Stats| Data[Training Data]
+    User["User Interface"] <-->|HTTP/JSON| NextJS["Next.js Frontend"]
+    NextJS <-->|API Calls| Flask["Flask Backend (Port 5001)"]
+    Flask -->|Inference| Binary["Binary Model (Naive Bayes)"]
+    Flask -->|Inference| Emotion["Emotion Model (LogReg)"]
+    Binary -->|Stats| Data["Training Data"]
 ```
 
 ---
