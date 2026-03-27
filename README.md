@@ -1,98 +1,138 @@
-<div align="center">
+# 🎭 Unified Sentiment & Emotion Analysis System
 
-# Unified Sentiment and Emotion Analysis System
+![Project Status](https://img.shields.io/badge/Status-Active-success)
+![Next.js](https://img.shields.io/badge/Next.js-16.0-black)
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![Flask](https://img.shields.io/badge/Flask-3.0-green)
+![Tailwind](https://img.shields.io/badge/Tailwind-CSS-3.4-38bdf8)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-Full-stack NLP project that combines binary sentiment classification with multi-class emotion detection.
+> **A state-of-the-art Natural Language Processing system combining binary sentiment classification (Naive Bayes) and multi-class emotion detection (Logistic Regression) into a unified, interactive full-stack application.**
 
-[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-3.0-000000?logo=flask)](https://flask.palletsprojects.com/)
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+## � Executive Summary
 
-[Quick Start](docs/QUICK_START.md) · [Project Summary](docs/PROJECT_SUMMARY.md) · [Methodology](docs/methodology.md)
+This project represents the convergence of two distinct NLP initiatives into a single, cohesive platform. It bridges the gap between raw data analysis and user-centric application design, providing researchers and developers with a powerful toolset for text analysis.
 
-</div>
+**Key capabilities:**
+-   **Dual-Model Intelligence:** Seamlessly switch between identifying *Subjective Sentiment* (Positive/Negative) and *Granular Emotion* (Happiness, Sadness, Anger, etc.).
+-   **Real-Time Visualization:** Interactive charts fueled by live training data statistics, powered by Recharts and Framer Motion.
+-   **Modern Architecture:** A decoupled architecture featuring a robust Python/Flask backend API and a high-performance Next.js 16 frontend.
 
-## Overview
+---
 
-This repository merges two NLP workflows into one application: a binary sentiment model powered by Naive Bayes and a multi-class emotion model powered by logistic regression. The Python backend serves inference and stats, while the Next.js frontend visualizes the results.
+## 🛠️ Technology Stack & Advancements
 
-## Table of Contents
+### Frontend (User Experience)
+-   **Framework:** **Next.js 16 (App Router)** for server-side rendering and optimal performance.
+-   **Styling:** **Tailwind CSS** with a custom "Apple-inspired" minimalist design system (Glassmorphism, clean typography).
+-   **Animation:** **Framer Motion** for fluid, physics-based UI transitions.
+-   **Visualization:** **Recharts** for responsive, animated data charting.
 
-- [Features](#features)
-- [Stack](#stack)
-- [Quick Start](#quick-start)
-- [Project Structure](#project-structure)
-- [Scripts](#scripts)
-- [License](#license)
+### Backend (Intelligence)
+-   **API Server:** **Flask** providing a RESTful interface for model inference and statistics.
+-   **Machine Learning:** **Scikit-learn** implementation of Multinomial Naive Bayes and Logistic Regression.
+-   **Processing:** Advanced text cleaning pipeline (NLTK/Regex) with support for N-grams and Stopword removal.
 
-## Features
+---
 
-- Binary sentiment classification for positive and negative text.
-- Emotion detection with multiple labeled emotion classes.
-- Flask API for analysis and statistics.
-- Next.js dashboard with animated charts and a modern UI.
-- CLI tools for batch analysis and model inspection.
-- Notebook-based analysis workflow and reusable Python modules.
+## 🏗️ System Architecture
 
-## Stack
-
-- Python 3.8+
-- Flask and Flask-CORS
-- Scikit-learn
-- pandas, numpy, nltk, textblob, neattext
-- Next.js 16
-- Tailwind CSS
-- Framer Motion
-- Recharts
-
-## Quick Start
-
-```bash
-git clone https://github.com/mangeshraut712/AI-Powered-Sentiment-Analysis.git
-cd AI-Powered-Sentiment-Analysis
-pip install -r requirements.txt
-python src/app.py
+```mermaid
+graph LR
+    User["User Interface"] <-->|HTTP/JSON| NextJS["Next.js Frontend"]
+    NextJS <-->|API Calls| Flask["Flask Backend (Port 5001)"]
+    Flask -->|Inference| Binary["Binary Model (Naive Bayes)"]
+    Flask -->|Inference| Emotion["Emotion Model (LogReg)"]
+    Binary -->|Stats| Data["Training Data"]
 ```
 
-In a second terminal:
+---
 
+## 🚀 Key Features
+
+### 1. Unified CLI Tool
+Access all capabilities from the terminal.
+```bash
+# Detect Emotion
+python cli.py emotion --text "I am feeling wonderful today!"
+
+# Check Sentiment
+python cli.py classify --text "This product is a complete failure."
+```
+
+### 2. Interactive Web Application
+A stunning, dark-mode enabled web interface.
+-   **Live Demo:** Type text and get instant classification results for both Sentiment and Emotion.
+-   **Dataset Insights:** Visualize the balance of training data (Positive vs Negative) and inspect top feature words in real-time.
+
+---
+
+## 🏁 Getting Started
+
+### Prerequisites
+-   Python 3.8+
+-   Node.js 18+
+
+### 1. Installation
+
+**Python Environment:**
+```bash
+pip install -r requirements.txt
+python -m nltk.downloader punkt stopwords wordnet
+```
+
+**Web Dependencies:**
 ```bash
 cd web
 npm install
+cd ..
+```
+
+### 2. Running the System
+
+To experience the full application, run the Backend and Frontend simultaneously.
+
+**Terminal 1: Python Backend**
+```bash
+python src/app.py
+# Server starts on http://localhost:5001
+```
+
+**Terminal 2: Web Frontend**
+```bash
+cd web
 npm run dev
+# App accessible at http://localhost:3000
 ```
 
-Open `http://localhost:3000` for the frontend and `http://localhost:5001` for the Flask API.
+### 3. Running the CLI Demo
+Verify the installation quickly:
+```bash
+python demo.py
+```
 
-## Project Structure
+---
 
-```text
-.
-├── cli.py                # CLI entry point
-├── data/                 # Dataset notes and generated assets
-├── docs/                 # Summary, methodology, and quick start docs
-├── examples/             # Usage examples
-├── notebooks/            # Analysis notebooks
-├── results/              # Trained model artifacts and reports
-├── scripts/              # Analysis and verification helpers
+## � Project Structure
+
+```
+├── cli.py                  # Unified Command Line Interface
+├── demo.py                 # Quick verification script
 ├── src/
-│   ├── app.py           # Flask API
-│   ├── models/          # Binary and emotion models
-│   ├── preprocessing.py # Text cleaning
-│   ├── visualization.py # Plot helpers
-│   └── utils/           # Shared helpers
-└── web/                  # Next.js frontend
+│   ├── app.py              # Flask API Server
+│   ├── models/             # ML Model Implementations
+│   │   ├── binary.py       # Naive Bayes Classifier
+│   │   └── emotion.py      # Logistic Regression Classifier
+│   ├── preprocessing.py    # NLP Pipeline
+│   └── visualization.py    # Plotting Utilities
+├── web/
+│   ├── src/app/page.tsx    # Main UI Dashboard
+│   └── ...
+├── data/                   # Datasets (Raw & Processed)
+└── scripts/                # Utility Scripts (Training, etc.)
 ```
 
-## Scripts
+---
 
-- `python cli.py classify --text "..."` - run binary sentiment classification.
-- `python cli.py emotion --text "..."` - predict an emotion label.
-- `python cli.py stats --top-n 10` - show classifier statistics.
-- `python scripts/verify_setup.py` - check the project setup.
-- `python scripts/run_analysis.py` - run the analysis pipeline.
-
-## License
-
-This project is released under the MIT License. See [LICENSE](LICENSE) for details.
+## 📜 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
