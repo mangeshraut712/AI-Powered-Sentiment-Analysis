@@ -41,6 +41,11 @@ This interface follows:
 
 ## 🚀 Getting Started
 
+**Live demo:** [https://mangeshraut712.github.io/AI-Powered-Sentiment-Analysis/](https://mangeshraut712.github.io/AI-Powered-Sentiment-Analysis/)
+
+GitHub Pages serves a static export. Analysis on that URL uses an on-device lexicon. For trained models, run Flask locally (`python src/app.py`) and `npm run dev`.
+
+
 ### Install Dependencies
 ```bash
 cd web

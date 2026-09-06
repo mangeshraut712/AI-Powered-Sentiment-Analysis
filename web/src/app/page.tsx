@@ -11,6 +11,14 @@ import {
   Brain, TrendingUp, MessageCircle, Zap, ArrowRight, Activity,
   BarChart3, PieChartIcon, Send, Moon, Sun, Github, ChevronDown
 } from "lucide-react";
+import {
+  analyzeTextWithFallback,
+  fetchStatsWithFallback,
+  normalizeEmotion,
+  type AnalysisResult,
+  type EmotionName,
+} from "@/analysis/demo-analyzer";
+import { DEMO_STATS, type DatasetStats, type FeatureCount } from "@/analysis/demo-stats";
 
 // Emotion data from the actual analysis
 const emotionData = [
@@ -224,22 +232,29 @@ function StatsSection() {
 }
 
 function VisualizationsSection() {
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<DatasetStats>(DEMO_STATS);
 
   useEffect(() => {
-    fetch('http://localhost:5001/api/stats')
-      .then(res => res.json())
-      .then(data => setStats(data))
-      .catch(err => console.error("Stats fetch error:", err));
+    void fetchStatsWithFallback(DEMO_STATS).then((data) => {
+      if (data?.binary) {
+        setStats(data);
+      }
+    });
   }, []);
 
-  const binaryData = stats?.binary ? [
-    { name: 'Positive', value: stats.binary.positive_docs, color: '#22c55e' },
-    { name: 'Negative', value: stats.binary.negative_docs, color: '#ef4444' }
-  ] : [];
+  const binaryData = [
+    { name: "Positive", value: stats.binary.positive_docs, color: "#22c55e" },
+    { name: "Negative", value: stats.binary.negative_docs, color: "#ef4444" },
+  ];
 
-  const topPos = stats?.binary?.top_features?.positive?.slice(0, 5).map(([word, count]: any) => ({ name: word, value: count })) || [];
-  const topNeg = stats?.binary?.top_features?.negative?.slice(0, 5).map(([word, count]: any) => ({ name: word, value: count })) || [];
+  const topPos = stats.binary.top_features.positive.slice(0, 5).map(([word, count]: FeatureCount) => ({
+    name: word,
+    value: count,
+  }));
+  const topNeg = stats.binary.top_features.negative.slice(0, 5).map(([word, count]: FeatureCount) => ({
+    name: word,
+    value: count,
+  }));
   return (
     <section id="visualizations" className="py-32 px-6 bg-secondary/30">
       <div className="max-w-7xl mx-auto">
@@ -255,7 +270,7 @@ function VisualizationsSection() {
             Data Visualization
           </motion.p>
           <motion.h2 variants={fadeUp}>
-            Dataset Insights (Real-time)
+            Dataset Insights
           </motion.h2>
         </motion.div>
 
@@ -374,9 +389,7 @@ function VisualizationsSection() {
             </ResponsiveContainer>
           </motion.div>
 
-          {/* New: Binary Sentiment Distribution */}
-          {stats?.binary && (
-            <motion.div
+          <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
@@ -416,11 +429,8 @@ function VisualizationsSection() {
                 <div className="flex items-center gap-2 text-sm"><div className="w-3 h-3 rounded-full bg-red-500" /> Negative</div>
               </div>
             </motion.div>
-          )}
 
-          {/* New: Top Words */}
-          {stats?.binary && (
-            <motion.div
+          <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
@@ -458,7 +468,6 @@ function VisualizationsSection() {
                 </div>
               </div>
             </motion.div>
-          )}
 
           {/* Model Performance */}
           <motion.div
@@ -495,44 +504,40 @@ function VisualizationsSection() {
   );
 }
 
+function sentimentToneClass(sentiment: AnalysisResult["sentiment"]): string {
+  switch (sentiment) {
+    case "Positive":
+      return "text-green-500";
+    case "Negative":
+      return "text-red-500";
+    case "Neutral":
+      return "text-gray-500";
+    default: {
+      const _exhaustive: never = sentiment;
+      return _exhaustive;
+    }
+  }
+}
+
 function DemoSection() {
   const [text, setText] = useState("");
-  const [result, setResult] = useState<null | { emotion: string; confidence: number; sentiment: string }>(null);
+  const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const analyzeText = async () => {
     if (!text.trim()) return;
 
     setIsAnalyzing(true);
-
     try {
-      // Call local Python Backend
-      const response = await fetch('http://localhost:5001/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
-      });
-
-      if (!response.ok) throw new Error('Network response was not ok');
-
-      const data = await response.json();
-
-      setResult({
-        emotion: data.emotion,
-        confidence: data.emotion_confidence,
-        sentiment: data.sentiment
-      });
-
-    } catch (error) {
-      console.error("Analysis failed:", error);
-      // Fallback for demo if backend not running
-      setResult({ emotion: "Error", confidence: 0, sentiment: "Backend Offline" });
+      const data = await analyzeTextWithFallback(text);
+      setResult(data);
     } finally {
       setIsAnalyzing(false);
     }
   };
 
-  const getEmotionData = (name: string) => emotionData.find(e => e.name === name) || emotionData[0];
+  const getEmotionData = (name: EmotionName) =>
+    emotionData.find((e) => e.name === name) || emotionData[0];
 
   return (
     <section id="demo" className="py-32 px-6">
@@ -550,6 +555,10 @@ function DemoSection() {
           <motion.h2 variants={fadeUp}>
             Try It Yourself
           </motion.h2>
+          <motion.p variants={fadeUp} className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+            GitHub Pages runs an on-device lexicon demo. Point{" "}
+            <code className="text-sm">NEXT_PUBLIC_API_URL</code> at the Flask API for trained models.
+          </motion.p>
         </motion.div>
 
         <motion.div
@@ -612,7 +621,7 @@ function DemoSection() {
                 <div className="zen-line mb-8" />
                 <div className="flex items-center justify-center gap-6">
                   {(() => {
-                    const data = getEmotionData(result.emotion);
+                    const data = getEmotionData(normalizeEmotion(result.emotion));
                     const Icon = data.icon;
                     return (
                       <>
@@ -629,9 +638,11 @@ function DemoSection() {
                           <div className="text-3xl font-light">{result.emotion}</div>
                           <div className="text-muted-foreground">
                             Confidence: {(result.confidence * 100).toFixed(1)}%
+                            {" · "}
+                            {result.source === "api" ? "Flask model" : "On-device demo"}
                           </div>
                         </div>
-                        <div className={`text-lg font-medium mt-1 ${result.sentiment === "Positive" ? "text-green-500" : result.sentiment === "Negative" ? "text-red-500" : "text-gray-500"}`}>
+                        <div className={`text-lg font-medium mt-1 ${sentimentToneClass(result.sentiment)}`}>
                           {result.sentiment.toUpperCase()} SENTIMENT
                         </div>
 
@@ -767,7 +778,7 @@ function Footer() {
 
           <div className="flex gap-4">
             <a
-              href="https://github.com"
+              href="https://github.com/mangeshraut712/AI-Powered-Sentiment-Analysis"
               target="_blank"
               rel="noopener noreferrer"
               className="p-3 rounded-full border border-border hover:bg-secondary transition-colors"

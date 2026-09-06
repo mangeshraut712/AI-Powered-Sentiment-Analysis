@@ -9,9 +9,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Sentiment Analysis | Emotion Detection",
-  description: "AI-powered emotion detection from text using machine learning. A minimalist approach to understanding human emotions.",
+  title: "AI-Powered Sentiment Analysis",
+  description:
+    "Classify binary sentiment and seven emotions from text. Live demo of the DSCI-521 NLP project.",
   keywords: ["sentiment analysis", "emotion detection", "NLP", "machine learning", "AI"],
+  metadataBase: new URL("https://mangeshraut712.github.io/AI-Powered-Sentiment-Analysis/"),
 };
 
 export default function RootLayout({
