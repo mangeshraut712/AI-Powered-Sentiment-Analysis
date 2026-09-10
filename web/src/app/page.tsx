@@ -792,7 +792,7 @@ function Footer() {
 
         <div className="text-center text-sm text-muted-foreground">
           <p>Built with Next.js, Framer Motion & Recharts</p>
-          <p className="mt-2">© 2024 DSCI-521 Group Project • Drexel University</p>
+          <p className="mt-2">© 2026 DSCI-521 Group Project • Drexel University</p>
         </div>
       </div>
     </footer>

@@ -11,6 +11,16 @@ Classifies **binary sentiment** (positive / negative) and **seven emotions** (ha
 ![Flask](https://img.shields.io/badge/Flask-API-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
+<p align="center">
+  <img src="docs/screenshots/homepage.png" alt="Homepage: Understanding Happiness hero with Try Demo and View Analytics" width="920" />
+</p>
+<p align="center">
+  <img src="docs/screenshots/live-demo.png" alt="Live demo: I love this amazing day classified as Happiness, 89.6% confidence, positive sentiment" width="920" />
+</p>
+<p align="center">
+  <img src="docs/screenshots/dataset-insights.png" alt="Dataset insights: tweet counts by emotion and emotion proportion charts" width="920" />
+</p>
+
 ## How to run
 
 ### Web UI (GitHub Pages or local static)
@@ -80,6 +90,7 @@ flowchart LR
 │   ├── models/             # Binary + emotion classifiers
 │   └── preprocessing.py
 ├── web/                    # Next.js UI (static export for Pages)
+├── docs/screenshots/       # Product screenshots for README / portfolio
 ├── data/                   # Datasets
 └── scripts/                # Training / analysis
 ```

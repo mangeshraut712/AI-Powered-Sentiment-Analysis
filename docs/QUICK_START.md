@@ -8,7 +8,6 @@ Welcome to the DSCI-521 Sentiment Analysis Project! This guide will help you get
 
 ### Step 1: Install Dependencies
 ```bash
-cd /Users/mangeshraut/Downloads/DSCI_521_Group_Project
 pip install -r requirements.txt
 ```
 

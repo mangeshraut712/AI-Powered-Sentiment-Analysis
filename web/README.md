@@ -70,7 +70,7 @@ web/
 │       ├── layout.tsx     # Root layout
 │       └── page.tsx       # Main page component
 ├── package.json
-├── tailwind.config.ts
+├── postcss.config.mjs
 └── tsconfig.json
 ```
 
@@ -171,8 +171,8 @@ All animations use Framer Motion:
 
 ## 🔌 Future Improvements
 
-- [ ] Connect to Python backend API
-- [ ] Real-time model predictions
+- [x] Connect to Python backend API (`NEXT_PUBLIC_API_URL` / local Flask)
+- [x] Real-time model predictions (API + on-device demo fallback)
 - [ ] Upload CSV for batch analysis
 - [ ] Export results functionality
 - [ ] User authentication
