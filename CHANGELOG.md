@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.0.1] - 2026-09-10
+
+### Added
+- Product screenshots (`docs/screenshots/`) for README / portfolio cards
+
+### Changed
+- Footer copyright and UI metadata year to 2026
+- Replaced a machine-specific local path in `docs/QUICK_START.md`
+
+---
+
 ## [1.0.0] - 2024-12-09
 
 ### Added - Project Reorganization
@@ -91,8 +102,8 @@ All notable changes to this project will be documented in this file.
 
 ### Planned Features
 - [ ] Deep learning models (LSTM, BERT)
-- [ ] Real-time sentiment analysis API
-- [ ] Web interface for predictions
+- [x] Real-time sentiment analysis API (`src/app.py`)
+- [x] Web interface for predictions (Next.js + GitHub Pages)
 - [ ] Multi-language support
 - [ ] Emoji sentiment analysis
 - [ ] Temporal trend analysis
@@ -115,6 +126,7 @@ All notable changes to this project will be documented in this file.
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 1.0.1 | 2026-09-10 | Portfolio screenshots and 2026 metadata polish |
 | 1.0.0 | 2024-12-09 | Complete reorganization and documentation |
 | 0.2.0 | 2022-08 | Group submission (Summer 2022) |
 | 0.1.1 | 2022-08 | Individual submission (Josh) |
