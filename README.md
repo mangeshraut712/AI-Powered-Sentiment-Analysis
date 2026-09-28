@@ -11,15 +11,21 @@ Classifies **binary sentiment** (positive / negative) and **seven emotions** (ha
 ![Flask](https://img.shields.io/badge/Flask-API-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-<p align="center">
-  <img src="docs/screenshots/homepage.png" alt="Homepage: Understanding Happiness hero with Try Demo and View Analytics" width="920" />
-</p>
-<p align="center">
-  <img src="docs/screenshots/live-demo.png" alt="Live demo: I love this amazing day classified as Happiness, 89.6% confidence, positive sentiment" width="920" />
-</p>
-<p align="center">
-  <img src="docs/screenshots/dataset-insights.png" alt="Dataset insights: tweet counts by emotion and emotion proportion charts" width="920" />
-</p>
+## Screenshots
+
+Framed captures of the live app (current UI).
+
+<div align="center">
+
+<img src="docs/screenshots/01-home.webp" alt="Hero: Understanding Happiness, with Try Demo and View Analytics" width="720" />
+
+<img src="docs/screenshots/02-insights.webp" alt="Dataset Insights charts for tweet counts, proportions, radar, and sentiment balance" width="720" />
+
+<img src="docs/screenshots/03-demo.webp" alt="Live demo classifying I love this amazing day as Happiness with positive sentiment" width="720" />
+
+<img src="docs/screenshots/04-features.webp" alt="Features grid covering tweets, emotions, TF-IDF, models, and live analysis" width="720" />
+
+</div>
 
 ## How to run
 
