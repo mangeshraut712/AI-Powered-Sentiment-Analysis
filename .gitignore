@@ -78,3 +78,6 @@ logs/
 
 # Large Sentiment Data
 data/sentiment/
+# Local agent tooling
+.agents/
+skills-lock.json
