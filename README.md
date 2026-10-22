@@ -13,6 +13,10 @@ Classifies **binary sentiment** (positive / negative) and **seven emotions** (ha
 
 ## Screenshots
 
+Unframed capture of the [live demo](https://mangeshraut712.github.io/AI-Powered-Sentiment-Analysis/) home page, taken with headless Chromium on 22 October 2026:
+
+<p align="center"><img src="docs/screenshots/live-home.webp" alt="AI-Powered-Sentiment-Analysis live demo home page" width="720" /></p>
+
 Framed captures of the live app (current UI).
 
 <div align="center">
