@@ -19,6 +19,11 @@ CORS(app)  # Enable CORS for Next.js
 binary_clf = None
 emotion_model = None
 emotion_vectorizer = None
+MAX_TEXT_LENGTH = 10_000
+
+
+def json_error(message, status):
+    return jsonify({'error': message}), status
 
 def load_models():
     global binary_clf, emotion_model, emotion_vectorizer
@@ -72,11 +77,25 @@ def stats():
 
 @app.route('/api/analyze', methods=['POST'])
 def analyze():
-    data = request.json
-    text = data.get('text', '')
-    
-    if not text:
-        return jsonify({'error': 'No text provided'}), 400
+    if not request.is_json:
+        return json_error('Content-Type must be application/json', 415)
+
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        return json_error('JSON body must be an object', 400)
+
+    if 'text' not in data:
+        return json_error('No text provided', 400)
+
+    text = data['text']
+    if not isinstance(text, str):
+        return json_error('Text must be a string', 400)
+
+    if not text.strip():
+        return json_error('No text provided', 400)
+
+    if len(text) > MAX_TEXT_LENGTH:
+        return json_error('Text exceeds maximum length of 10000 characters', 413)
         
     results = {}
     
