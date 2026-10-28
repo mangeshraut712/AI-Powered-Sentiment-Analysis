@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from werkzeug.exceptions import RequestEntityTooLarge
 import sys
 import os
 from pathlib import Path
@@ -20,10 +21,20 @@ binary_clf = None
 emotion_model = None
 emotion_vectorizer = None
 MAX_TEXT_LENGTH = 10_000
+# Reject oversized bodies before parsing or inference; 128 KiB permits 10,000
+# Unicode characters and their JSON encoding overhead.
+MAX_REQUEST_BODY_BYTES = 128 * 1024
+app.config['MAX_CONTENT_LENGTH'] = MAX_REQUEST_BODY_BYTES
 
 
 def json_error(message, status):
     return jsonify({'error': message}), status
+
+
+@app.errorhandler(RequestEntityTooLarge)
+def request_entity_too_large(error):
+    return json_error('Request body exceeds maximum size of 128 KiB', 413)
+
 
 def load_models():
     global binary_clf, emotion_model, emotion_vectorizer

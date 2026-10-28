@@ -1,13 +1,21 @@
 import importlib
+import json
 import sys
 
 import pytest
 
 
+REQUEST_BODY_LIMIT_BYTES = 128 * 1024
+
+
 class StubBinaryClassifier:
     """Avoid loading a trained model while exercising the Flask route."""
 
+    def __init__(self):
+        self.classify_calls = []
+
     def classify(self, text):
+        self.classify_calls.append(text)
         return "positive", 0.9
 
 
@@ -26,6 +34,15 @@ def api_module(monkeypatch):
 @pytest.fixture
 def client(api_module):
     return api_module.app.test_client()
+
+
+def json_body_with_size(size):
+    payload = {"text": "ok", "ignored": ""}
+    encoded = json.dumps(payload).encode("utf-8")
+    payload["ignored"] = "x" * (size - len(encoded))
+    encoded = json.dumps(payload).encode("utf-8")
+    assert len(encoded) == size
+    return encoded
 
 
 @pytest.mark.parametrize("body", ["null", "[]", '"sentiment"'])
@@ -105,6 +122,52 @@ def test_analyze_accepts_text_at_the_maximum_length(client):
     response = client.post("/api/analyze", json={"text": "a" * 10_000})
 
     assert response.status_code == 200
+
+
+def test_analyze_accepts_request_body_at_the_size_limit(api_module, client):
+    response = client.post(
+        "/api/analyze",
+        data=json_body_with_size(REQUEST_BODY_LIMIT_BYTES),
+        content_type="application/json",
+    )
+
+    assert response.status_code == 200
+    assert api_module.binary_clf.classify_calls == ["ok"]
+
+
+def test_analyze_rejects_an_oversized_ignored_field_before_classifying(api_module, client):
+    response = client.post(
+        "/api/analyze",
+        data=json_body_with_size(REQUEST_BODY_LIMIT_BYTES + 1),
+        content_type="application/json",
+    )
+
+    assert response.status_code == 413
+    assert response.is_json
+    assert response.get_json() == {"error": "Request body exceeds maximum size of 128 KiB"}
+    assert response.headers["Access-Control-Allow-Origin"] == "*"
+    assert api_module.binary_clf.classify_calls == []
+
+
+def test_analyze_accepts_valid_unicode_text(api_module, client):
+    text = "Café très bien 😀"
+
+    response = client.post("/api/analyze", json={"text": text})
+
+    assert response.status_code == 200
+    assert api_module.binary_clf.classify_calls == [text]
+
+
+def test_analyze_accepts_maximum_length_unicode_text_under_request_limit(api_module, client):
+    text = "😀" * 10_000
+    body = json.dumps({"text": text}).encode("utf-8")
+
+    assert len(body) < REQUEST_BODY_LIMIT_BYTES
+
+    response = client.post("/api/analyze", data=body, content_type="application/json")
+
+    assert response.status_code == 200
+    assert api_module.binary_clf.classify_calls == [text]
 
 
 def test_analyze_returns_results_for_valid_text(client):
