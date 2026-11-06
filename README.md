@@ -52,6 +52,10 @@ python src/app.py
 # http://localhost:5001  —  POST /api/analyze  GET /api/stats  GET /health
 ```
 
+`POST /api/analyze` accepts a JSON object with a string `text` field. Text is
+limited to 10,000 characters, and the complete JSON request body is limited to
+128 KiB.
+
 With the API running, `npm run dev` in `web/` calls `http://localhost:5001` automatically. To point a build at a hosted API:
 
 ```bash
