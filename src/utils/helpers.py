@@ -22,7 +22,7 @@ def clean_text(text: str) -> str:
     text = re.sub(r'<[^>]+>', '', text)
     
     # Remove URLs
-    text = re.sub(r'http\S+|www.\S+', '', text)
+    text = re.sub(r'https?://\S+|www\.\S+', '', text)
     
     # Remove extra whitespace
     text = re.sub(r'\s+', ' ', text)
