@@ -163,7 +163,7 @@ def get_sentiment_polarity(text):
     try:
         blob = TextBlob(str(text))
         return blob.sentiment.polarity
-    except:
+    except Exception:
         return 0.0
 
 
@@ -184,7 +184,7 @@ def get_sentiment_subjectivity(text):
     try:
         blob = TextBlob(str(text))
         return blob.sentiment.subjectivity
-    except:
+    except Exception:
         return 0.0
 
 
