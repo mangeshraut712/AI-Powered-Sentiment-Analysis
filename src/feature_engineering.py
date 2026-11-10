@@ -53,7 +53,7 @@ def extract_keywords(df, text_column='cleaned_text', sentiment_column='sentiment
             try:
                 vectorizer.fit(sentiment_texts)
                 keywords[sentiment] = vectorizer.get_feature_names_out().tolist()
-            except:
+            except Exception:
                 keywords[sentiment] = []
     
     return keywords
