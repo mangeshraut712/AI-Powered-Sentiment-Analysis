@@ -18,6 +18,9 @@ def clean_text(text: str) -> str:
     Returns:
         Cleaned text
     """
+    if not isinstance(text, str):
+        return ""
+
     # Remove HTML tags
     text = re.sub(r'<[^>]+>', '', text)
     
