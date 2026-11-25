@@ -46,6 +46,15 @@ def print_section(title):
     print(f"  {title}")
     print("="*70)
 
+OUTPUT_DIRS = ("data/processed", "results/models", "results/metrics")
+
+
+def ensure_output_dirs(base=Path(".")):
+    """Create the save-step directories, which a fresh checkout does not track."""
+    for rel in OUTPUT_DIRS:
+        (Path(base) / rel).mkdir(parents=True, exist_ok=True)
+
+
 def main():
     """Run the complete analysis pipeline."""
     
@@ -236,6 +245,7 @@ def main():
     # STEP 9: Save Results
     # ========================================================================
     print_section("STEP 9: Saving Results")
+    ensure_output_dirs()
     
     # Save processed data
     output_path = Path('data/processed/processed_tweets.csv')

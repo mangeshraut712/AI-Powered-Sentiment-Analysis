@@ -55,3 +55,22 @@ def test_run_analysis_module_level_code_executes(monkeypatch):
 
     assert callable(module.main)
     assert str(REPO_ROOT) in sys.path
+
+
+def test_ensure_output_dirs_creates_every_save_target(monkeypatch, tmp_path):
+    # A fresh checkout has no data/processed or results/models|metrics, and the
+    # save step used to fail on the first to_csv before any model was written.
+    for module_name, attributes in STUBBED_MODULES.items():
+        stub = types.ModuleType(module_name)
+        for attribute in attributes:
+            setattr(stub, attribute, lambda *args, **kwargs: None)
+        monkeypatch.setitem(sys.modules, module_name, stub)
+    monkeypatch.setattr(sys, "path", list(sys.path))
+    spec = importlib.util.spec_from_file_location("run_analysis_dirs", SCRIPT_PATH)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    module.ensure_output_dirs(tmp_path)
+    module.ensure_output_dirs(tmp_path)  # idempotent
+    for rel in ("data/processed", "results/models", "results/metrics"):
+        assert (tmp_path / rel).is_dir()
