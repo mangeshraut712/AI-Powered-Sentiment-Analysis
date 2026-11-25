@@ -11,13 +11,14 @@ import sys
 import warnings
 warnings.filterwarnings('ignore')
 
+from pathlib import Path
+
 # Add project to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import pandas as pd
 import numpy as np
 import pickle
-from pathlib import Path
 
 # Import our modules
 from src.data_loader import load_dataset, get_dataset_info, save_processed_data
